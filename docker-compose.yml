@@ -39,3 +39,14 @@ services:
     image: postgres:9.6
     expose: [ 5432 ]
     ports: [ "5496:5432" ]
+
+  pg10:
+    image: postgres:10
+    expose: [ 5432 ]
+    ports: [ "5410:5432" ]
+
+  pg11:
+    image: postgres:11
+    expose: [ 5432 ]
+    ports: [ "5411:5432" ]
+

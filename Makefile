@@ -1,7 +1,7 @@
 PACKAGE_NAME = libzbxpgsql
-PACKAGE_VERSION = 1.1.0
+PACKAGE_VERSION = 1.2.0
 
-ZABBIX_VERSION = 3.2.3
+ZABBIX_VERSION = 4.0.4
 
 # args common to all 'docker run' commands
 DOCKER_RUNARGS = -it --rm \
@@ -23,7 +23,7 @@ all: libzbxpgsql.so
 
 # build module
 libzbxpgsql.so:
-	$(DOCKER_RUN) $(PACKAGE_NAME)/build-debian-jessie build
+	$(DOCKER_RUN) $(PACKAGE_NAME)/build-debian-stretch build
 
 # build docker images for compiling, testing and packaging the module
 docker-images:
@@ -31,7 +31,7 @@ docker-images:
 
 # create source tarball
 dist:
-	$(DOCKER_RUN) $(PACKAGE_NAME)/build-debian-jessie dist
+	$(DOCKER_RUN) $(PACKAGE_NAME)/build-debian-stretch dist
 
 clean:
 	rm -rvf release
@@ -58,12 +58,9 @@ test-packages:
 	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-3.0-debian-jessie test_package
 	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-3.0-ubuntu-trusty test_package
 	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-3.0-ubuntu-xenial test_package
-	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-3.2-centos-6 test_package
-	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-3.2-centos-7 test_package
-	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-3.2-debian-wheezy test_package
-	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-3.2-debian-jessie test_package
-	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-3.2-ubuntu-trusty test_package
-	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-3.2-ubuntu-xenial test_package
+	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-4.0-centos-7 test_package
+	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-4.0-debian-stretch test_package
+	$(DOCKER_RUN) $(PACKAGE_NAME)/zabbix-4.0-ubuntu-bionic test_package
 
 # run key compatibility tests (requires `make run-postgres`)
 test-keys:
@@ -83,8 +80,10 @@ run-agent: libzbxpgsql.so
 		--link pg94:libzbxpgsql_pg94_1 \
 		--link pg95:libzbxpgsql_pg95_1 \
 		--link pg96:libzbxpgsql_pg96_1 \
+		--link pg10:libzbxpgsql_pg10_1 \
+		--link pg11:libzbxpgsql_pg11_1 \
 		--name libzbxpgsql_agent \
-		$(PACKAGE_NAME)/zabbix-3.2-debian-jessie agent
+		$(PACKAGE_NAME)/zabbix-4.0-debian-stretch agent
 
 # start a test environment including each postgresql version and a zabbix agent
 run-postgres:
